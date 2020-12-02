@@ -33,7 +33,6 @@ How many passwords are valid according to their policies?
 
 package aoc02
 
-import scala.io.Source
 import scala.util.parsing.combinator.RegexParsers
 
 trait Common {
@@ -55,11 +54,6 @@ trait Common {
 
   val parser: InputParser
 
-  /** Load a file from src/main/resources/[package] into an iterable of strings */
-  def load(resource: String): Iterable[String] = {
-    Source.fromInputStream(getClass.getResourceAsStream(resource)).getLines().toIterable
-  }
-
   /** @return the number of lines that pass the password check */
   def count(inputs: Iterable[String]): Int = {
     inputs.count { input => parser.parseAll(parser.line, input).get }
@@ -77,7 +71,7 @@ object Passwords extends Common {
   }
 
   override lazy val parser = new InputParser(Checker.apply)
-  lazy val result: Int = count(load("input.txt"))
+  lazy val result: Int = count(util.Loader(this, "input.txt"))
 }
 
 /*
@@ -117,5 +111,5 @@ object Passwords2 extends Common {
   }
 
   override lazy val parser = new InputParser(Checker.apply)
-  lazy val result: Int = count(load("input.txt"))
+  lazy val result: Int = count(util.Loader(this, "input.txt"))
 }
