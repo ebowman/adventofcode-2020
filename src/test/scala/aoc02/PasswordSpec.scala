@@ -3,32 +3,48 @@ package aoc02
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should._
 
+class ParserSpec extends AnyFlatSpec with Matchers with aoc02.Common {
 
-class PasswordSpec extends AnyFlatSpec with Matchers {
+  case class AllCapsChecker(c: String, a: Int, b: Int) extends Rule {
+    def check(password: String): Boolean = password.capitalize == password
+  }
+
+  override val parser = new InputParser(AllCapsChecker.apply)
+
+  "Parsing" should "pass basic tests" in {
+    parser.parseAll(parser.num, "2").get shouldBe 2
+    parser.parseAll(parser.rule, "1-3 a").get.check("HELLO") shouldBe true
+  }
+}
+
+trait InputSource {
+  val input: Seq[String] =
+    """
+      |1-3 a: abcde
+      |1-3 b: cdefg
+      |2-9 c: ccccccccc
+      |""".stripMargin.split("\n").filter(_.nonEmpty).toSeq
+}
+
+class PasswordSpec extends AnyFlatSpec with Matchers with aoc02.Common with InputSource {
+
+  val parser = Passwords.parser.asInstanceOf[InputParser]
+
   "Checker" should "pass basic tests" in {
-    import Passwords.Checker
-    Checker("a", 0, 2).check("b") shouldBe true
-    Checker("a", 0, 2).check("ba") shouldBe true
-    Checker("a", 0, 2).check("aba") shouldBe true
-    Checker("a", 0, 2).check("abaca") shouldBe false
-
-    Checker.makeChecker("1-3 z").check("zzz") shouldBe true
-    Checker.makeChecker("1-3 z").check("zzzz") shouldBe false
+    count(input) shouldBe 2
   }
 
   it should "solve the final puzzle" in {
     Passwords.result shouldBe 591
   }
+}
+
+class Password2Spec extends AnyFlatSpec with Matchers with aoc02.Common with InputSource {
+
+  val parser = Passwords2.parser.asInstanceOf[InputParser]
 
   "Checker2" should "pass the examples" in {
-    import Passwords2.Checker
-
-    // 1-3 a: abcde is valid: position 1 contains a and position 3 does not.
-    // 1-3 b: cdefg is invalid: neither position 1 nor position 3 contains b.
-    // 2-9 c: ccccccccc is invalid: both position 2 and position 9 contain c.
-    Checker.makeChecker("1-3 a").check("abcde") shouldBe true
-    Checker.makeChecker("1-3 b").check("cdefg") shouldBe false
-    Checker.makeChecker("2-9 c").check("ccccccccc") shouldBe false
+    count(input) shouldBe 1
   }
 
   it should "solve the final puzzle" in {

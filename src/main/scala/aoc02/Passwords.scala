@@ -33,38 +33,51 @@ How many passwords are valid according to their policies?
 
 package aoc02
 
-import java.io.InputStream
 import scala.io.Source
+import scala.util.parsing.combinator.RegexParsers
 
-object Passwords extends App {
+trait Common {
 
-  object Checker {
-    def makeChecker(input: String): Checker = {
-      val Shape = """(\d+)-(\d+) (.+)""".r
-      input match {
-        case Shape(min, max, c) => Checker(c, min.toInt, max.toInt)
-      }
-    }
+  trait Rule {
+    def check(password: String): Boolean
   }
 
-  case class Checker(c: String, min: Int, max: Int) {
-    assert(c.length == 1, s"Assumes a 1-char string: $c")
+  // Parser that takes a password rule factory to adapt to the different rules
+  class InputParser(mkRule: (String, Int, Int) => Rule) extends RegexParsers {
+    override def skipWhitespace = false
 
+    def num: Parser[Int] = """\d+""".r ^^ { _.toInt }
+
+    def rule: Parser[Rule] = num ~ "-" ~ num ~ " " ~ ".".r ^^ { case a ~ _ ~ b ~ _ ~ c => mkRule(c, a, b) }
+
+    def line: Parser[Boolean] = rule ~ ": " ~ "[a-z]+".r ^^ { case rule ~ _ ~ password => rule.check(password) }
+  }
+
+  val parser: InputParser
+
+  /** Load a file from src/main/resources/[package] into an iterable of strings */
+  def load(resource: String): Iterable[String] = {
+    Source.fromInputStream(getClass.getResourceAsStream(resource)).getLines().toIterable
+  }
+
+  /** @return the number of lines that pass the password check */
+  def count(inputs: Iterable[String]): Int = {
+    inputs.count { input => parser.parseAll(parser.line, input).get }
+  }
+}
+
+object Passwords extends App with Common {
+
+
+  case class Checker(c: String, min: Int, max: Int) extends Rule {
     def check(password: String): Boolean = {
       val count = password.count(_ == c(0))
       count >= min && count <= max
     }
   }
 
-  def count(i: InputStream): Int = {
-    val inputs = Source.fromInputStream(i).getLines()
-    inputs.count { input =>
-      val Array(rule, password) = input.split(":")
-      Checker.makeChecker(rule).check(password)
-    }
-  }
-
-  lazy val result = count(getClass.getResourceAsStream("input.txt"))
+  override lazy val parser = new InputParser(Checker.apply)
+  lazy val result = count(load("input.txt"))
   println(result)
 }
 
@@ -94,36 +107,17 @@ Given the same example list from above:
 2-9 c: ccccccccc is invalid: both position 2 and position 9 contain c.
 How many passwords are valid according to the new interpretation of the policies?
  */
-object Passwords2 extends App {
+object Passwords2 extends App with Common {
 
-  object Checker {
-    private val Shape = """(\d+)-(\d+) (.+)""".r
+  private def xor(x: Boolean, y: Boolean): Boolean = (x && !y) || (!x && y)
 
-    def makeChecker(input: String): Checker = {
-      input match {
-        case Shape(min, max, c) => Checker(c, min.toInt, max.toInt)
-      }
-    }
-  }
-
-  case class Checker(c: String, min: Int, max: Int) {
-    assert(c.length == 1, s"Assumes a 1-char string: $c")
-
+  case class Checker(c: String, min: Int, max: Int) extends Rule {
     def check(password: String): Boolean = {
-      def xor(x: Boolean, y: Boolean): Boolean = (x && !y) || (!x && y)
-
       xor(password(min - 1) == c(0), password(max - 1) == c(0))
     }
   }
 
-  def count(i: InputStream): Int = {
-    val inputs = Source.fromInputStream(i).getLines()
-    inputs.count { input =>
-      val Array(rule, password) = input.split(": ")
-      Checker.makeChecker(rule).check(password)
-    }
-  }
-
-  lazy val result = count(getClass.getResourceAsStream("input.txt"))
+  override lazy val parser = new InputParser(Checker.apply)
+  lazy val result = count(load("input.txt"))
   println(result)
 }
