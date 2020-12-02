@@ -4,7 +4,7 @@ import scala.io.Source
 
 /** For day 2, we are looking for 3 numbers that sum to 2020 */
 object Sum3 extends App {
-  val inputs = Source.fromInputStream(Sum2020.getClass.getResourceAsStream("input.txt")).getLines().map(_.toInt).toSet
+  val inputs = Source.fromInputStream(getClass.getResourceAsStream("input.txt")).getLines().map(_.toInt).toSet
 
   for (a <- inputs) {
     for (b <- inputs if a != b) {
