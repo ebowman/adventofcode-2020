@@ -57,7 +57,7 @@ If you still want to see it, you can get your puzzle input.
  */
 package aoc01
 
-object Sum2020 extends App {
+object Sum2020 {
 
   /** Load the custom inputs (from src/main/resources/aoc02/input.txt) into a Set[Int] */
   lazy val inputs = {
@@ -78,8 +78,6 @@ object Sum2020 extends App {
 
   lazy val sum2 = s2(inputs)
 
-  println(sum2)
-
   /** Similar to s2, but this assumes there are 3 values which together add up to 2020, and returns their product. */
   def s3(inputs: Set[Int]): Int = {
     inputs.flatMap { a =>
@@ -90,6 +88,4 @@ object Sum2020 extends App {
   }
 
   lazy val sum3 = s3(inputs)
-
-  println(sum3)
 }

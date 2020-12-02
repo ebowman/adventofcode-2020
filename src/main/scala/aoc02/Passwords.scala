@@ -66,7 +66,7 @@ trait Common {
   }
 }
 
-object Passwords extends App with Common {
+object Passwords extends Common {
 
 
   case class Checker(c: String, min: Int, max: Int) extends Rule {
@@ -77,8 +77,7 @@ object Passwords extends App with Common {
   }
 
   override lazy val parser = new InputParser(Checker.apply)
-  lazy val result = count(load("input.txt"))
-  println(result)
+  lazy val result: Int = count(load("input.txt"))
 }
 
 /*
@@ -107,7 +106,7 @@ Given the same example list from above:
 2-9 c: ccccccccc is invalid: both position 2 and position 9 contain c.
 How many passwords are valid according to the new interpretation of the policies?
  */
-object Passwords2 extends App with Common {
+object Passwords2 extends Common {
 
   private def xor(x: Boolean, y: Boolean): Boolean = (x && !y) || (!x && y)
 
@@ -118,6 +117,5 @@ object Passwords2 extends App with Common {
   }
 
   override lazy val parser = new InputParser(Checker.apply)
-  lazy val result = count(load("input.txt"))
-  println(result)
+  lazy val result: Int = count(load("input.txt"))
 }

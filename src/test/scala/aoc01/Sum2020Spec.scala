@@ -11,6 +11,11 @@ class Sum2020Spec extends AnyFlatSpec with Matchers {
     Sum2020.s3(inputs) shouldBe 241861950
   }
 
+  it should "print out the result(s) we hope to get" in {
+    println(Sum2020.sum2)
+    println(Sum2020.sum3)
+  }
+
   it should "get the right answer for my personal inputs" in {
     Sum2020.sum2 shouldBe 987339
     Sum2020.sum3 shouldBe 259521570
