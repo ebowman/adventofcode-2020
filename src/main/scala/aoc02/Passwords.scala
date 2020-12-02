@@ -33,8 +33,7 @@ How many passwords are valid according to their policies?
 
 package aoc02
 
-import aoc02.Passwords.getClass
-
+import java.io.InputStream
 import scala.io.Source
 
 object Passwords extends App {
@@ -58,15 +57,15 @@ object Passwords extends App {
     }
   }
 
-  val inputs = Source.fromInputStream(getClass.getResourceAsStream("input.txt")).getLines()
-
-  var count = 0
-  for (input <- inputs) {
-    val Array(rule, password) = input.split(":")
-    if (Checker.makeChecker(rule).check(password)) count += 1
+  def count(i: InputStream): Int = {
+    val inputs = Source.fromInputStream(i).getLines()
+    inputs.count { input =>
+      val Array(rule, password) = input.split(":")
+      Checker.makeChecker(rule).check(password)
+    }
   }
-  println(count)
 
+  println(count(getClass.getResourceAsStream("input.txt")))
 }
 
 /*
@@ -97,9 +96,8 @@ How many passwords are valid according to the new interpretation of the policies
  */
 object Passwords2 extends App {
   object Checker {
+    val Shape = """(\d+)-(\d+) (.+)""".r
     def makeChecker(input: String): Checker = {
-      val Shape = """(\d+)-(\d+) (.+)""".r
-      assert(!input.contains(":"), s"You need to break apart the input: $input")
       input match {
         case Shape(min, max, c) => Checker(c, min.toInt, max.toInt)
       }
@@ -111,12 +109,13 @@ object Passwords2 extends App {
     def check(password: String): Boolean = password(min - 1) == c(0) && password(max - 1) != c(0)
   }
 
-  val inputs = Source.fromInputStream(getClass.getResourceAsStream("input.txt")).getLines()
-
-  val count = inputs.count { input =>
-    val Array(rule, password) = input.split(": ")
-    Checker.makeChecker(rule).check(password)
+  def count(i: InputStream): Int = {
+    val inputs = Source.fromInputStream(i).getLines()
+    inputs.count { input =>
+      val Array(rule, password) = input.split(": ")
+      Checker.makeChecker(rule).check(password)
+    }
   }
-  println(count)
 
+  println(count(getClass.getResourceAsStream("input.txt")))
 }
