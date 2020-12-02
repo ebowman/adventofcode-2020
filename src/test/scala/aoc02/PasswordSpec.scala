@@ -33,7 +33,7 @@ class PasswordSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "solve the final puzzle" in {
-    Passwords2.count(getClass.getResourceAsStream("input.txt")) shouldNot equal(157)
+    Passwords2.count(getClass.getResourceAsStream("input.txt")) shouldBe 335
   }
 
 

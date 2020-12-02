@@ -95,8 +95,10 @@ Given the same example list from above:
 How many passwords are valid according to the new interpretation of the policies?
  */
 object Passwords2 extends App {
+
   object Checker {
     val Shape = """(\d+)-(\d+) (.+)""".r
+
     def makeChecker(input: String): Checker = {
       input match {
         case Shape(min, max, c) => Checker(c, min.toInt, max.toInt)
@@ -106,7 +108,11 @@ object Passwords2 extends App {
 
   case class Checker(c: String, min: Int, max: Int) {
     assert(c.length == 1, s"Assumes a 1-char string: $c")
-    def check(password: String): Boolean = password(min - 1) == c(0) && password(max - 1) != c(0)
+
+    def check(password: String): Boolean = {
+      def xor(x: Boolean, y: Boolean): Boolean = (x && !y) || (!x && y)
+      xor(password(min - 1) == c(0), password(max - 1) == c(0))
+    }
   }
 
   def count(i: InputStream): Int = {
