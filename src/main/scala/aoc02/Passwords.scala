@@ -41,7 +41,6 @@ object Passwords extends App {
   object Checker {
     def makeChecker(input: String): Checker = {
       val Shape = """(\d+)-(\d+) (.+)""".r
-      assert(!input.contains(":"), s"You need to break apart the input: $input")
       input match {
         case Shape(min, max, c) => Checker(c, min.toInt, max.toInt)
       }
@@ -65,7 +64,8 @@ object Passwords extends App {
     }
   }
 
-  println(count(getClass.getResourceAsStream("input.txt")))
+  lazy val result = count(getClass.getResourceAsStream("input.txt"))
+  println(result)
 }
 
 /*
@@ -97,7 +97,7 @@ How many passwords are valid according to the new interpretation of the policies
 object Passwords2 extends App {
 
   object Checker {
-    val Shape = """(\d+)-(\d+) (.+)""".r
+    private val Shape = """(\d+)-(\d+) (.+)""".r
 
     def makeChecker(input: String): Checker = {
       input match {
@@ -111,6 +111,7 @@ object Passwords2 extends App {
 
     def check(password: String): Boolean = {
       def xor(x: Boolean, y: Boolean): Boolean = (x && !y) || (!x && y)
+
       xor(password(min - 1) == c(0), password(max - 1) == c(0))
     }
   }
@@ -123,5 +124,6 @@ object Passwords2 extends App {
     }
   }
 
-  println(count(getClass.getResourceAsStream("input.txt")))
+  lazy val result = count(getClass.getResourceAsStream("input.txt"))
+  println(result)
 }

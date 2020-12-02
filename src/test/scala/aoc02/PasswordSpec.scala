@@ -1,8 +1,7 @@
 package aoc02
 
-import org.scalatest._
-import matchers.should._
 import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should._
 
 
 class PasswordSpec extends AnyFlatSpec with Matchers {
@@ -18,7 +17,7 @@ class PasswordSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "solve the final puzzle" in {
-    Passwords.count(getClass.getResourceAsStream("input.txt")) shouldBe 591
+    Passwords.result shouldBe 591
   }
 
   "Checker2" should "pass the examples" in {
@@ -33,8 +32,6 @@ class PasswordSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "solve the final puzzle" in {
-    Passwords2.count(getClass.getResourceAsStream("input.txt")) shouldBe 335
+    Passwords2.result shouldBe 335
   }
-
-
 }
