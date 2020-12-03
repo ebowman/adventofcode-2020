@@ -2,7 +2,7 @@ package y2015
 
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should._
-import y2015.Lights.{BitGrid, InstructionParser, Rect, Toggle, TurnOff, TurnOn}
+import y2015.Lights.{BitGrid, InstructionParser, IntGrid, Rect, Toggle, TurnOff, TurnOn}
 
 class Day06Spec extends AnyFlatSpec with Matchers with InstructionParser {
   "Parser" should "pass basic tests" in {
@@ -33,5 +33,20 @@ class Day06Spec extends AnyFlatSpec with Matchers with InstructionParser {
       parseAll(command, instruction).get.operate(grid)
     }
     grid.countTurnedOn() shouldBe 377891
+  }
+
+  "test2" should "pass the test case" in {
+    val grid = new IntGrid(1000, 1000)
+    parseAll(command, "turn on 0,0 through 0,0").get.operate(grid).countTurnedOn() shouldBe 1
+    parseAll(command, "toggle 0,0 through 999,999").get.operate(grid).countTurnedOn() shouldBe 2000001
+    parseAll(command, "turn off 0,0 through 999,999").get.operate(grid).countTurnedOn() shouldBe 1000001
+  }
+
+  it should "pass the final test" in {
+    val grid = new IntGrid(1000,1000)
+    util.Loader(this, "day06.txt").foreach { instruction =>
+      parseAll(command, instruction).get.operate(grid)
+    }
+    grid.countTurnedOn() shouldBe 14110788
   }
 }
