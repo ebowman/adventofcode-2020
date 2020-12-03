@@ -66,29 +66,37 @@ class Day25Spec extends AnyFlatSpec with Matchers {
 
     // this is inefficient but helpful to confirm correctness
     lazy val cursors: Stream[Generator] =
-      Generator.origin #:: Generator.origin.next #:: cursors.zip(cursors.tail).map { _._2.next }
+      Generator.origin #:: Generator.origin.next #:: cursors.zip(cursors.tail).map {
+        _._2.next
+      }
 
-    for (v <- values) { cursors.contains(v) shouldBe true }
+    for (v <- values) {
+      cursors.contains(v) shouldBe true
+    }
   }
 
   it should "solve for our specific input" in {
 
     val dest = Cursor(3010, 3019)
+
     @scala.annotation.tailrec
     def recurse(gen: Generator = Generator.origin): Generator = {
       if (gen.cursor == dest) gen
       else recurse(gen.next)
     }
+
     println(recurse().value)
   }
 
   it should "continue to solve for our specific input" in {
     val dest = Cursor(3010, 3019)
+
     @scala.annotation.tailrec
     def recurse(gen: Generator = Generator.origin): Generator = {
       if (gen.cursor == dest) gen
       else recurse(gen.next)
     }
+
     recurse().value shouldBe 8997277
   }
 }

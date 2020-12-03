@@ -37,6 +37,13 @@ import scala.util.parsing.combinator.RegexParsers
 
 trait Common {
 
+  val parser: InputParser
+
+  /** @return the number of lines that pass the password check */
+  def count(inputs: Iterable[String]): Int = {
+    inputs.count { input => parser.parseAll(parser.line, input).get }
+  }
+
   trait Rule {
     def check(password: String): Boolean
   }
@@ -45,23 +52,19 @@ trait Common {
   class InputParser(mkRule: (String, Int, Int) => Rule) extends RegexParsers {
     override def skipWhitespace = false
 
-    def num: Parser[Int] = """\d+""".r ^^ { _.toInt }
+    def line: Parser[Boolean] = rule ~ ": " ~ "[a-z]+".r ^^ { case rule ~ _ ~ password => rule.check(password) }
 
     def rule: Parser[Rule] = num ~ "-" ~ num ~ " " ~ ".".r ^^ { case a ~ _ ~ b ~ _ ~ c => mkRule(c, a, b) }
 
-    def line: Parser[Boolean] = rule ~ ": " ~ "[a-z]+".r ^^ { case rule ~ _ ~ password => rule.check(password) }
-  }
-
-  val parser: InputParser
-
-  /** @return the number of lines that pass the password check */
-  def count(inputs: Iterable[String]): Int = {
-    inputs.count { input => parser.parseAll(parser.line, input).get }
+    def num: Parser[Int] = """\d+""".r ^^ { _.toInt }
   }
 }
 
 object Passwords extends Common {
 
+
+  override lazy val parser = new InputParser(Checker.apply)
+  lazy val result: Int = count(util.Loader(this, "input.txt"))
 
   case class Checker(c: String, min: Int, max: Int) extends Rule {
     def check(password: String): Boolean = {
@@ -69,9 +72,6 @@ object Passwords extends Common {
       count >= min && count <= max
     }
   }
-
-  override lazy val parser = new InputParser(Checker.apply)
-  lazy val result: Int = count(util.Loader(this, "input.txt"))
 }
 
 /*
@@ -102,6 +102,9 @@ How many passwords are valid according to the new interpretation of the policies
  */
 object Passwords2 extends Common {
 
+  override lazy val parser = new InputParser(Checker.apply)
+  lazy val result: Int = count(util.Loader(this, "input.txt"))
+
   private def xor(x: Boolean, y: Boolean): Boolean = (x && !y) || (!x && y)
 
   case class Checker(c: String, min: Int, max: Int) extends Rule {
@@ -109,7 +112,4 @@ object Passwords2 extends Common {
       xor(password(min - 1) == c(0), password(max - 1) == c(0))
     }
   }
-
-  override lazy val parser = new InputParser(Checker.apply)
-  lazy val result: Int = count(util.Loader(this, "input.txt"))
 }

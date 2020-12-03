@@ -5,11 +5,11 @@ import org.scalatest.matchers.should._
 
 class ParserSpec extends AnyFlatSpec with Matchers with aoc02.Common {
 
+  override val parser = new InputParser(AllCapsChecker.apply)
+
   case class AllCapsChecker(c: String, a: Int, b: Int) extends Rule {
     def check(password: String): Boolean = password.capitalize == password
   }
-
-  override val parser = new InputParser(AllCapsChecker.apply)
 
   "Parsing" should "pass basic tests" in {
     parser.parseAll(parser.num, "2").get shouldBe 2

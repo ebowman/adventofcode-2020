@@ -64,6 +64,8 @@ object Sum2020 {
     import scala.io.Source
     Source.fromInputStream(getClass.getResourceAsStream("input.txt")).getLines().map(_.toInt).toSet
   }
+  lazy val sum2 = s2(inputs)
+  lazy val sum3 = s3(inputs)
 
   /**
    * Given a Set[Int], assumes there are two values within it that sum to 2020. Finds them and returns their product.
@@ -76,8 +78,6 @@ object Sum2020 {
     }.head
   }
 
-  lazy val sum2 = s2(inputs)
-
   /** Similar to s2, but this assumes there are 3 values which together add up to 2020, and returns their product. */
   def s3(inputs: Set[Int]): Int = {
     inputs.flatMap { a =>
@@ -86,6 +86,4 @@ object Sum2020 {
       }
     }.head
   }
-
-  lazy val sum3 = s3(inputs)
 }
