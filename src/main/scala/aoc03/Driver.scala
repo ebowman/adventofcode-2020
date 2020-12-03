@@ -19,10 +19,10 @@ object Driver {
 
       @scala.annotation.tailrec
       final def solve(trees: Int = 0): Int = {
-        val t = trees + tree
-        val n = next
-        if (n.nonEmpty) n.get.solve(t)
-        else t
+        next match {
+          case Some(nxt) => nxt.solve(trees + tree)
+          case None => trees + tree
+        }
       }
     }
 
