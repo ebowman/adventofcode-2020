@@ -4,7 +4,10 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should._
 
 class DriverSpec extends AnyFlatSpec with Matchers {
-  val testInput =
+
+  import Driver._
+
+  private val testInput =
     """
       |..##.......
       |#...#...#..
@@ -17,32 +20,26 @@ class DriverSpec extends AnyFlatSpec with Matchers {
       |#.##...#...
       |#...##....#
       |.#..#...#.#""".stripMargin.trim.split("\n").toIndexedSeq
+  private val liveInput = util.Loader(this, "input.txt").toIndexedSeq
+  private val slopes = Seq(defaultSlope, (1, 1), (5, 1), (7, 1), (1, 2))
+  private val testBoards = slopes.map(slope => Board(testInput, slope))
+  private val liveBoards = slopes.map(slope => Board(liveInput, slope))
 
-  val liveInput = util.Loader(this, "input.txt").toIndexedSeq
-
-  import Driver._
-  val testBoards = Seq(Board(testInput), Board(testInput, 1, 1), Board(testInput, 5, 1), Board(testInput, 7, 1), Board(testInput, 1, 2))
-  val liveBoards = Seq(Board(liveInput), Board(liveInput, 1, 1), Board(liveInput, 5, 1), Board(liveInput, 7, 1), Board(liveInput, 1, 2))
+  private def product(a: Long, b: Int): Long = a * b
 
   "Driver" should "do pass the given test case" in {
-    val board = Board(testInput)
-    recurse(Cursor(board)) shouldBe 7
+    Board(testInput).solve shouldBe 7
   }
 
   it should "solve the puzzle (part 1)" in {
-    val board = Board(liveInput)
-    recurse(Cursor(board)) shouldBe 176
+    Board(liveInput).solve shouldBe 176
   }
 
   it should "solve the second puzzle test case" in {
-    testBoards.map { board => recurse(Cursor(board)) }.foldLeft(1) {
-      case (a: Int, b: Int) => a * b
-    } shouldBe 336
+    testBoards.map(_.solve).foldLeft(1L)(product) shouldBe 336
   }
 
   it should "solve the second puzzle live case" in {
-    liveBoards.map { board => recurse(Cursor(board)) }.foldLeft(1L) {
-      case (a: Long, b: Int) => a * b
-    } shouldBe 5872458240L
+    liveBoards.map(_.solve).foldLeft(1L)(product) shouldBe 5872458240L
   }
 }
