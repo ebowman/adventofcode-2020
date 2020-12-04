@@ -44,7 +44,7 @@ trait Driver extends RegexParsers {
 
   def v: Parser[String] = """[^ ]+""".r
 
-  def keyvalue: Parser[(String, String)] = label ~ ":" ~ v ^^ { case l ~ _ ~ v => (l, v) }
+  def keyvalue: Parser[(String, String)] = (label <~ ":") ~ v ^^ { case l ~ v => (l, v) }
 
   def line: Parser[Unit] = rep1sep(keyvalue, " ") ^^ {
     _.foreach(kv => fields.put(kv._1, kv._2))

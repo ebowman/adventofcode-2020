@@ -71,17 +71,17 @@ object Lights {
   trait InstructionParser extends RegexParsers {
     override def skipWhitespace = false
 
-    def num: Parser[Int] = """\d+""".r ^^ { case i => i.toInt }
+    def num: Parser[Int] = """\d+""".r ^^ { _.toInt }
 
-    def pair: Parser[(Int, Int)] = num ~ "," ~ num ^^ { case x ~ _ ~ y => (x, y) }
+    def pair: Parser[(Int, Int)] = (num <~ ",") ~ num ^^ { case x ~ y => (x, y) }
 
-    def range: Parser[Rect] = pair ~ " through " ~ pair ^^ { case tl ~ _ ~ br => Rect.mkRect(tl._1, tl._2, br._1, br._2) }
+    def range: Parser[Rect] = (pair <~ " through ") ~ pair ^^ { case tl ~ br => Rect.mkRect(tl._1, tl._2, br._1, br._2) }
 
-    def turnOn: Parser[TurnOn] = "turn on" ~ " " ~ range ^^ { case _ ~ _ ~ range => TurnOn(range) }
+    def turnOn: Parser[TurnOn] = ("turn on" ~ " ") ~> range ^^ { TurnOn.apply }
 
-    def turnOff: Parser[TurnOff] = "turn off" ~ " " ~ range ^^ { case _ ~ _ ~ range => TurnOff(range) }
+    def turnOff: Parser[TurnOff] = ("turn off" ~ " ") ~> range ^^ { TurnOff.apply }
 
-    def toggle: Parser[Toggle] = "toggle" ~ " " ~ range ^^ { case _ ~ _ ~ range => Toggle(range) }
+    def toggle: Parser[Toggle] = ("toggle" ~ " ") ~> range ^^ { Toggle.apply }
 
     def command: Parser[Command] = turnOn | turnOff | toggle
   }

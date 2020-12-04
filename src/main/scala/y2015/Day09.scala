@@ -18,7 +18,7 @@ trait Day09 extends RegexParsers {
   // Faerun to Norrath = 144
   private def place: Parser[String] = """[a-zA-Z]+""".r
   private def distance: Parser[Int] = """\d+""".r ^^ { _.toInt }
-  def edge: Parser[Unit] = place ~ "to" ~ place ~ "=" ~ distance ^^ {
-    case from ~ _ ~ to ~ _ ~ dist => newPath(from, to, dist)
+  def edge: Parser[Unit] = place ~ ("to" ~> place) ~ ("=" ~> distance) ^^ {
+    case from ~ to ~ dist => newPath(from, to, dist)
   }
 }

@@ -52,9 +52,9 @@ trait Common {
   class InputParser(mkRule: (String, Int, Int) => Rule) extends RegexParsers {
     override def skipWhitespace = false
 
-    def line: Parser[Boolean] = rule ~ ": " ~ "[a-z]+".r ^^ { case rule ~ _ ~ password => rule.check(password) }
+    def line: Parser[Boolean] = (rule <~ ": ") ~ "[a-z]+".r ^^ { case rule ~ password => rule.check(password) }
 
-    def rule: Parser[Rule] = num ~ "-" ~ num ~ " " ~ ".".r ^^ { case a ~ _ ~ b ~ _ ~ c => mkRule(c, a, b) }
+    def rule: Parser[Rule] = (num <~ "-") ~ (num <~ " ") ~ ".".r ^^ { case a ~ b ~ c => mkRule(c, a, b) }
 
     def num: Parser[Int] = """\d+""".r ^^ { _.toInt }
   }
