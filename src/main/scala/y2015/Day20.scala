@@ -2,15 +2,15 @@ package y2015
 
 trait Day20 {
 
-  final case class Elf(n: Int) {
+  case class Elf(n: Int) {
     val presents: Long = 10 * n
 
-    @inline def visits(house: Int): Boolean = (house % n) == 0
+    def visits(house: Int): Boolean = (house % n) == 0
   }
 
   lazy val elves: Stream[Elf] = Stream.from(1).map(Elf.apply)
 
-  final case class House(n: Int) {
+  case class House(n: Int) {
     override def toString = s"House($n, $presents)"
     lazy val presents: Long = elves.take(n).filter(_.visits(n)).map(_.presents).sum
   }
