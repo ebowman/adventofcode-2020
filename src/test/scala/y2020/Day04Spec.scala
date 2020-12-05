@@ -1,10 +1,10 @@
-package aoc04
+package y2020
 
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should._
 import util.Loader
 
-class DriverSpec extends AnyFlatSpec with Matchers with Driver {
+class Day04Spec extends AnyFlatSpec with Matchers with Day04 {
 
   "Driver" should "do pass the given test case" in {
     val input =
@@ -37,7 +37,7 @@ class DriverSpec extends AnyFlatSpec with Matchers with Driver {
 
     var count = 0
     fields.clear()
-    for (l <- Loader(this, "input.txt")) {
+    for (l <- Loader(this, "day04.txt")) {
       if (l.isEmpty) {
         if (validate(fields.toMap)) count += 1
         fields.clear()
@@ -55,7 +55,7 @@ class DriverSpec extends AnyFlatSpec with Matchers with Driver {
     extended = true
     var count = 0
     fields.clear()
-    for (l <- Loader(this, "input.txt")) {
+    for (l <- Loader(this, "day04.txt")) {
       if (l.isEmpty) {
         if (validate(fields.toMap)) count += 1
         fields.clear()

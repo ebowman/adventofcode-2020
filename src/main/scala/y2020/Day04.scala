@@ -1,8 +1,8 @@
-package aoc04
+package y2020
 
 import scala.util.parsing.combinator.RegexParsers
 
-trait Driver extends RegexParsers {
+trait Day04 extends RegexParsers {
   override def skipWhitespace = false
 
   import collection.mutable

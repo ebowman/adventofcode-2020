@@ -1,11 +1,11 @@
-package aoc03
+package y2020
 
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should._
 
-class DriverSpec extends AnyFlatSpec with Matchers {
+class Day03Spec extends AnyFlatSpec with Matchers {
 
-  import Driver._
+  import y2020.Day03._
 
   private val testInput =
     """
@@ -20,7 +20,7 @@ class DriverSpec extends AnyFlatSpec with Matchers {
       |#.##...#...
       |#...##....#
       |.#..#...#.#""".stripMargin.trim.split("\n").toIndexedSeq
-  private val liveInput = util.Loader(this, "input.txt").toIndexedSeq
+  private val liveInput = util.Loader(this, "day03.txt").toIndexedSeq
   private val slopes = Seq(defaultSlope, (1, 1), (5, 1), (7, 1), (1, 2))
   private val testBoards = slopes.map(slope => Board(testInput, slope))
   private val liveBoards = slopes.map(slope => Board(liveInput, slope))

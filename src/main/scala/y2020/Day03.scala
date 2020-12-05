@@ -1,6 +1,6 @@
-package aoc03
+package y2020
 
-object Driver {
+object Day03 {
 
   val defaultSlope: (Int, Int) = (3, 1)
 

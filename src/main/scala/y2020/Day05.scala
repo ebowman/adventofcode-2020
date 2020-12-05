@@ -1,8 +1,8 @@
-package aoc05
+package y2020
 
 import scala.annotation.tailrec
 
-trait Driver {
+trait Day05 {
 
   case class SeatFinder(code: String, rowMin: Int = 0, rowMax: Int = 127, colMin: Int = 0, colMax: Int = 7) {
     private def next: Option[SeatFinder] = {
@@ -35,4 +35,5 @@ trait Driver {
       (done.rowMin, done.colMin)
     }
   }
+
 }

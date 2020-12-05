@@ -1,11 +1,11 @@
-package aoc02
+package y2020
 
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should._
 
-class ParserSpec extends AnyFlatSpec with Matchers with aoc02.Common {
+class ParserSpec extends AnyFlatSpec with Matchers with y2020.Day02 {
 
-  override val parser = new InputParser(AllCapsChecker.apply)
+  val parser = new InputParser(AllCapsChecker.apply)
 
   case class AllCapsChecker(c: String, a: Int, b: Int) extends Rule {
     def check(password: String): Boolean = password.capitalize == password
@@ -17,17 +17,14 @@ class ParserSpec extends AnyFlatSpec with Matchers with aoc02.Common {
   }
 }
 
-trait InputSource {
-  val input: Seq[String] =
+class PasswordSpec extends AnyFlatSpec with Matchers with y2020.Day02 {
+
+  lazy val input: Seq[String] =
     """
       |1-3 a: abcde
       |1-3 b: cdefg
       |2-9 c: ccccccccc
       |""".stripMargin.split("\n").filter(_.nonEmpty).toSeq
-}
-
-class PasswordSpec extends AnyFlatSpec with Matchers with aoc02.Common with InputSource {
-
   val parser = Passwords.parser.asInstanceOf[InputParser]
 
   "Checker" should "pass basic tests" in {
@@ -43,7 +40,14 @@ class PasswordSpec extends AnyFlatSpec with Matchers with aoc02.Common with Inpu
   }
 }
 
-class Password2Spec extends AnyFlatSpec with Matchers with aoc02.Common with InputSource {
+class Password2Spec extends AnyFlatSpec with Matchers with Day02 {
+
+  lazy val input: Seq[String] =
+    """
+      |1-3 a: abcde
+      |1-3 b: cdefg
+      |2-9 c: ccccccccc
+      |""".stripMargin.split("\n").filter(_.nonEmpty).toSeq
 
   val parser = Passwords2.parser.asInstanceOf[InputParser]
 
