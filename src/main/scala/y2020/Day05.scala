@@ -17,7 +17,7 @@ trait Day05 {
       }
     }
 
-    def id = {
+    def id: Int = {
       val (row, col) = seat
       row * 8 + col
     }

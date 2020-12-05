@@ -4,7 +4,7 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should._
 import util.Loader
 
-class Day05pec extends AnyFlatSpec with Matchers with Day05 {
+class Day05Spec extends AnyFlatSpec with Matchers with Day05 {
   "SeatFinder" should "solve known test cases" in {
     SeatFinder("FBFBBFFRLR").seat shouldBe(44, 5)
     SeatFinder("FBFBBFFRLR").id shouldBe 357
