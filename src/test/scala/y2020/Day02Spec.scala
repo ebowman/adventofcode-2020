@@ -31,10 +31,6 @@ class PasswordSpec extends AnyFlatSpec with Matchers with y2020.Day02 {
     count(input) shouldBe 2
   }
 
-  it should "print out the result we hope to get" in {
-    println(Passwords.result)
-  }
-
   it should "solve the final puzzle" in {
     Passwords.result shouldBe 591
   }
@@ -53,10 +49,6 @@ class Password2Spec extends AnyFlatSpec with Matchers with Day02 {
 
   "Checker2" should "pass the examples" in {
     count(input) shouldBe 1
-  }
-
-  it should "print out the result we hope to get" in {
-    println(Passwords2.result)
   }
 
   it should "solve the final puzzle" in {

@@ -33,8 +33,8 @@ class Day04Spec extends AnyFlatSpec with Matchers with Day04 {
     }
     count shouldBe 2
   }
-  it should "pass the test" in {
 
+  it should "pass the test" in {
     var count = 0
     fields.clear()
     for (l <- Loader(this, "day04.txt")) {

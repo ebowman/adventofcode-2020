@@ -75,19 +75,6 @@ class Day25Spec extends AnyFlatSpec with Matchers {
     }
   }
 
-  it should "solve for our specific input" in {
-
-    val dest = Cursor(3010, 3019)
-
-    @scala.annotation.tailrec
-    def recurse(gen: Generator = Generator.origin): Generator = {
-      if (gen.cursor == dest) gen
-      else recurse(gen.next)
-    }
-
-    println(recurse().value)
-  }
-
   it should "continue to solve for our specific input" in {
     val dest = Cursor(3010, 3019)
 
