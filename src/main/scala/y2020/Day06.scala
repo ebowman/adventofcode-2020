@@ -34,7 +34,7 @@ trait Day06 {
   def traverse(input: Seq[Seq[String]], m: Int, op: (Int, Int) => Int): Int =
     input.map(_.foldLeft(m) { case (running, line) => op(running, parseWord(line)) }).map(countBits).sum
 
-  def solveAnd(input: Seq[Seq[String]]): Int = traverse(input, (1 << 27) - 1, _ & _)
-
   def solveOr(input: Seq[Seq[String]]): Int = traverse(input, 0, _ | _)
+
+  def solveAnd(input: Seq[Seq[String]]): Int = traverse(input, (1 << 27) - 1, _ & _)
 }
