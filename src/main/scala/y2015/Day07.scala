@@ -60,20 +60,8 @@ trait Day07 extends RegexParsers {
     case n ~ s ~ d => wires.put(d, OpAnd(d, Wire("", n), Named(s)))
   }
 
-  def and2: Parser[Unit] = (name <~ "AND") ~ num ~ ("->" ~> name) ^^ {
-    case s ~ n ~ d => wires.put(d, OpAnd(d, Wire("", n), Named(s)))
-  }
-
   def or: Parser[Unit] = (name <~ "OR") ~ name ~ ("->" ~> name) ^^ {
     case s1 ~ s2 ~ d => wires.put(d, OpOr(d, Named(s1), Named(s2)))
-  }
-
-  def or1: Parser[Unit] = (num <~ "OR") ~ name ~ ("->" ~> name) ^^ {
-    case n ~ s ~ d => wires.put(d, OpOr(d, Wire("", n), Named(s)))
-  }
-
-  def or2: Parser[Unit] = (name <~ "OR") ~ num ~ ("->" ~> name) ^^ {
-    case s ~ n ~ d => wires.put(d, OpOr(d, Wire("", n), Named(s)))
   }
 
   def lshift: Parser[Unit] = name ~ ("LSHIFT" ~> num) ~ ("->" ~> name) ^^ {
@@ -88,5 +76,5 @@ trait Day07 extends RegexParsers {
     case s ~ d => wires.put(d, OpNot(d, Named(s)))
   }
 
-  def parser: Parser[Unit] = wire | wire1 | and | and1 | and2 | or | or1 | or2 | lshift | rshift | _not
+  def parser: Parser[Unit] = wire | wire1 | and | and1 | or | lshift | rshift | _not
 }

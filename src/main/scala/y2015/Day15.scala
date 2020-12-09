@@ -21,34 +21,30 @@ trait Day15 {
     }
   }
 
-  def combine(ings: Seq[Ingredient], cursor: Cursor): Int = {
-    def ck(x: Int) = Math.max(x, 0)
-    val tmp = ings.zip(cursor.values)
-    ck((tmp.map { case (ing, amt) => ing.capacity * amt }).sum) *
-      ck((tmp.map { case (ing, amt) => ing.durability * amt }).sum) *
-      ck((tmp.map { case (ing, amt) => ing.flavor * amt }).sum) *
-      ck((tmp.map { case (ing, amt) => ing.texture * amt }).sum)
-  }
+  def combine(ings: Seq[Ingredient], cursor: Cursor): Int = sumUp(ings.zip(cursor.values))
 
   def combineCalories(ings: Seq[Ingredient], cursor: Cursor, exactCalories: Int): Int = {
-    def ck(x: Int) = Math.max(x, 0)
     val tmp = ings.zip(cursor.values)
     val calories = (tmp.map { case (ing, amt) => ing.calories * amt }).sum
-    if (calories == exactCalories) {
-      ck((tmp.map { case (ing, amt) => ing.capacity * amt }).sum) *
-        ck((tmp.map { case (ing, amt) => ing.durability * amt }).sum) *
-        ck((tmp.map { case (ing, amt) => ing.flavor * amt }).sum) *
-        ck((tmp.map { case (ing, amt) => ing.texture * amt }).sum)
-    } else 0
+    if (calories == exactCalories) sumUp(tmp)
+    else 0
+  }
+
+  private def sumUp(ingredients: Seq[(Ingredient, Int)]) = {
+    def ck(x: Int) = Math.max(x, 0)
+
+    ck((ingredients.map { case (ing, amt) => ing.capacity * amt }).sum) *
+      ck((ingredients.map { case (ing, amt) => ing.durability * amt }).sum) *
+      ck((ingredients.map { case (ing, amt) => ing.flavor * amt }).sum) *
+      ck((ingredients.map { case (ing, amt) => ing.texture * amt }).sum)
   }
 
   object Cursor {
     def apply(n: Int, sum: Int): Cursor =
-      Cursor(sum, new Array[Int](n)).next.getOrElse(sys.error("Cannot iterate"))
+      Cursor(sum, new Array[Int](n)).next.get
   }
 
   case class Cursor(sum: Int, values: Array[Int]) {
-    override def toString = s"Cursor($sum, [${values.mkString(",")}])"
 
     def next: Option[Cursor] = {
       @scala.annotation.tailrec
@@ -70,16 +66,12 @@ trait Day15 {
     private def incr: Cursor = {
       @scala.annotation.tailrec
       def helper(arr: Array[Int], cur: Int = 0): Array[Int] = {
-        if (arr.forall(_ == sum)) arr
-        else if (cur == arr.length) arr
-        else {
-          if (arr(cur) == sum) {
-            arr(cur) = 0
-            helper(arr, cur + 1)
-          } else {
-            arr(cur) = arr(cur) + 1
-            arr
-          }
+        if (arr(cur) == sum) {
+          arr(cur) = 0
+          helper(arr, cur + 1)
+        } else {
+          arr(cur) = arr(cur) + 1
+          arr
         }
       }
 
@@ -93,7 +85,7 @@ trait Day15 {
       c match {
         case None => max
         case Some(crs) =>
-          val newMax = Math.max(max, combine(ingredients, crs))   // compiler bug! temp var required!
+          val newMax = Math.max(max, combine(ingredients, crs)) // compiler bug! temp var required!
           recurse(crs.next, newMax)
       }
     }

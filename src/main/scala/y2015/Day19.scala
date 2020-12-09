@@ -70,11 +70,6 @@ trait Day19 extends RegexParsers {
         target = target.replaceFirst(b, a)
         count += 1
       }
-      if (tmp == target) {
-        target = targetMolecule
-        count = 0
-        rules = Random.shuffle(rules)
-      }
     }
     count
   }

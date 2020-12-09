@@ -11,7 +11,6 @@ trait Day20 {
   lazy val elves: Stream[Elf] = Stream.from(1).map(Elf.apply)
 
   case class House(n: Int) {
-    override def toString = s"House($n, $presents)"
     lazy val presents: Long = elves.take(n).filter(_.visits(n)).map(_.presents).sum
   }
 

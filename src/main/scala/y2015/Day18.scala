@@ -32,15 +32,7 @@ trait Day18 {
 
     assert(dim == board.length - 2)
 
-    override def toString: String = {
-      board.tail.init.map { row =>
-        row.tail.init.map(f => if (f) "#" else ".").mkString
-      }.mkString("\n")
-    }
-
     case class Cursor(x: Int, y: Int) extends Iterable[Boolean] {
-      assert(x >= 1 && x < board.length - 1, s"x out of bounds: $x")
-      assert(y >= 1 && y < board.length - 1, s"y out of bounds: $y")
 
       def lit: Int = this.count(x => x)
 
@@ -60,7 +52,6 @@ trait Day18 {
             case (1, -1) => cy = 1; cx = 0
             case (1, 0) => cy = 1; cx = 1
             case (1, 1) => cy = 2; cx = 2
-            case _ => sys.error("Iterator exhausted")
           }
           result
         }

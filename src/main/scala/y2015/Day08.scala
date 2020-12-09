@@ -19,7 +19,6 @@ trait Day08 {
           case 'x' =>
             b.append(".")
             recurse(s.drop(4), b)
-          case _ => sys.error(s"Cannot parse from $s: $b")
         }
         case c =>
           b.append(c)

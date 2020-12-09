@@ -38,23 +38,13 @@ trait Day12 extends JavaTokenParsers {
     }
   }
 
-  def trimQuotes(s: String): String = {
-    if (s.length < 2) s
-    else {
-      def f(s: String) = if (s.head == '"') s.tail else s
-      def b(s: String) = if (s.last == '"') s.init else s
-      f(b(s))
-    }
-  }
+  def trimQuotes(s: String): String = s.tail.init
 
   def expr: Parser[Json] = (
     obj
       | arr
       | stringLiteral ^^ {x => JsonString(trimQuotes(x)) }
       | floatingPointNumber ^^ (s => JsonNumber(BigDecimal(s)))
-      | "null" ^^ (_ => JsonNull)
-      | "true" ^^ (_ => JsonBoolean(true))
-      | "false" ^^ (_ => JsonBoolean(false))
     )
 
   def obj: Parser[JsonObject] = "{" ~> repsep(member, ",") <~ "}" ^^ JsonObject
@@ -64,8 +54,6 @@ trait Day12 extends JavaTokenParsers {
   def member: Parser[(String, Json)] = stringLiteral ~ ":" ~ expr ^^ {
     case k ~ ":" ~ v => trimQuotes(k) -> v
   }
-
-  def parseAll(in: CharSequence): ParseResult[Json] = parseAll(expr, in)
 
   def count(json: String): Int = parseAll(expr, json).get.count
 }
