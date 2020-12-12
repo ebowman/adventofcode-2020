@@ -12,9 +12,11 @@ trait Day12 {
 
     val Ins: Regex = """([A-Z])([0-9]+)""".r
 
-    def left(d: (Int, Int), n: Int): (Int, Int) = if (n == 0) d else left((-d._2, d._1), n - 1)
+    @tailrec
+    final def left(d: (Int, Int), n: Int): (Int, Int) = if (n == 0) d else left((-d._2, d._1), n - 1)
 
-    def right(d: (Int, Int), n: Int): (Int, Int) = if (n == 0) d else right((d._2, -d._1), n - 1)
+    @tailrec
+    final def right(d: (Int, Int), n: Int): (Int, Int) = if (n == 0) d else right((d._2, -d._1), n - 1)
 
     def manhattanDistance: Int = math.abs(row) + math.abs(col)
 
